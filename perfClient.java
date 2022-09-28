@@ -103,7 +103,7 @@ public static void main(String [] args) throws IOException{
 		byte[] bytes = new byte[messageSize];
         SecureRandom rand = null;
 		try {
-			rand = SecureRandom.getInstance("DRBG");
+			rand = SecureRandom.getInstance("SHA1PRNG");
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -114,15 +114,15 @@ public static void main(String [] args) throws IOException{
             result.append(String.format("%02x", temp));
         }
 		payLoad=result.toString();
-		System.out.println(payLoad.getBytes());
+		System.out.println(payLoad);
 		String output2="";
 		String returned="";
 		double RTT=0.0;
 		double TPUT=0.0;
 		long start;
 		long end;
-		for(int i=0;i<numberOfProbes;i++) {
-			output2='m'+" "+i+payLoad+'\n';
+		for(int i=1;i<=numberOfProbes;i++) {
+			output2='m'+" "+i+" "+payLoad+'\n';
 			start=System.nanoTime();
 			client.write(output2.getBytes());
 			returned=serverBuffer.readLine();

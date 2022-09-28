@@ -10,7 +10,7 @@ class childServer extends Thread{
 
 
         String errorMessage="404 ERROR: ";
-        String successMessage="200 OK: READY";
+        String successMessage="200 OK: Ready";
         String successMessage2="200 OK: Closing Connection";
         BufferedReader clientBuffer= null;
         try {
@@ -28,6 +28,7 @@ class childServer extends Thread{
 
             String message="";
             String message1 = clientBuffer.readLine();//read csp message
+            System.out.println(message1);
             //check the correctness of csp message
             String[] messageArr=message1.split(" ");
             errorMessage+="Invalid Connection Setup Message";
@@ -60,13 +61,14 @@ class childServer extends Thread{
             errorMessage="404 ERROR: Invalid Measurement Message";
             while(sequenceNumber<numberOfProbes){
                 String message2=clientBuffer.readLine();
+                System.out.println(message2);
                 String[] messageArr1=message2.split(" ");
                 if(messageArr1.length!=3){
 
                     throw new Exception("the MP length is not 3");
                 }
                 if(!messageArr1[0].equals("m")){
-                    throw new Exception("MP flas issue");
+                    throw new Exception("MP flags issue");
                 }
                 sequenceNumber=Integer.parseInt(messageArr1[1]);
                 if(sequenceNumber!=lastSequence+1){

@@ -64,11 +64,13 @@ public static void main(String [] args) throws IOException{
 				continue;
 			}
 		}
-		System.out.println("Enter message size");
+		System.out.println("Enter message size, cannot be smaller than 2");
 		while(true) {
 			try {
 				messageSize=Integer.parseInt(userEn.readLine());
-				
+				if(messageSize<2){
+					throw new Exception();
+				}
 				break;
 			}catch(Exception e) {
 				e.printStackTrace();
@@ -100,7 +102,7 @@ public static void main(String [] args) throws IOException{
 		//csp ends
 		//mp starts
 		String payLoad="";
-		byte[] bytes = new byte[messageSize];
+		byte[] bytes = new byte[(int)(messageSize/2)];
         SecureRandom rand = null;
 		try {
 			rand = SecureRandom.getInstance("SHA1PRNG");
@@ -111,7 +113,7 @@ public static void main(String [] args) throws IOException{
         rand.nextBytes(bytes);
         StringBuilder result = new StringBuilder();
         for (byte temp : bytes) {
-            result.append(String.format("%02x", temp));
+		result.append(String.format("%02x",temp));
         }
 		payLoad=result.toString();
 		System.out.println(payLoad);
@@ -121,10 +123,13 @@ public static void main(String [] args) throws IOException{
 		double TPUT=0.0;
 		long start;
 		long end;
+		byte[] bytes1;
 		for(int i=1;i<=numberOfProbes;i++) {
 			output2='m'+" "+i+" "+payLoad+'\n';
+			bytes1=output2.getBytes();
+			System.out.println(bytes1.length);
 			start=System.nanoTime();
-			client.write(output2.getBytes());
+			client.write(bytes1);
 			returned=serverBuffer.readLine();
 			end=System.nanoTime();
 			RTT+=(end-start);
